@@ -11,18 +11,15 @@ clock = pygame.time.Clock()
 FPS = 60
     
 def play():
-    
     pygame.init()
     player = ship(image = (pygame.image.load("img/ship1.png")), pos = (600,300), maxspeed = 5, rotospd = 1.5, maxreverse = -3)
     while True:
         screen.fill(colorbg)
         player.draw()
         clock.tick(60)
-        
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 pygame.quit()
-        
         movement = False
         key = pygame.key.get_pressed()
         if key[pygame.K_LEFT]:
@@ -41,12 +38,10 @@ def play():
             else:
                 player.revde()
         pygame.display.update()
-        
 
-            
+
 def mainmenu():
         pygame.init()
-        
         menutext = font.render("SHIP GAME", True, "#000000")
         menurect = menutext.get_rect(center=(600,100))
         playb = Button(image=pygame.image.load("img/play.png"), pos=(600,250))
@@ -71,22 +66,21 @@ def mainmenu():
                     running = False
                     pygame.quit()
 
-
-
 class Button():
     def __init__(self, image, pos):
         self.image = image
         self.x = pos[0]
         self.y = pos[1]
         self.rect = self.image.get_rect(center=(self.x, self.y))
-        
+    
     def draw(self):
         screen.blit(self.image, self.rect)
         
     def interact(self,posi):
         if posi[0] in range(self.rect.left, self.rect.right) and posi[1] in range(self.rect.top, self.rect.bottom):
             return True
-        return False                    
+        return False
+        
 class ship(pygame.sprite.Sprite):
     
     def __init__(self, image, pos, maxspeed, rotospd, maxreverse):        
