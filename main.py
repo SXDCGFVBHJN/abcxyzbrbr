@@ -12,7 +12,7 @@ FPS = 60
     
 def play():
     pygame.init()
-    player = ship(image = (pygame.image.load("img/ship1.png")), pos = (600,300), maxspeed = 5, rotospd = 1.5, maxreverse = -3)
+    player = ship(image = (pygame.image.load("img/ship.png")), pos = (600,300), maxspeed = 5, rotospd = 1.5, maxreverse = -3)
     while True:
         screen.fill(colorbg)
         player.draw()
