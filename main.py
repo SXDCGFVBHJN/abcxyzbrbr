@@ -65,7 +65,9 @@ def mainmenu():
                 if event.type == pygame.QUIT:
                     running = False
                     pygame.quit()
-
+def scaleimg(img, cons):
+    size = int(img.get_width() * cons), int(img.get_height() * cons)
+    return pygame.transform.scale(img, size)
 class Button():
     def __init__(self, image, pos):
         self.image = image
@@ -93,13 +95,14 @@ class ship(pygame.sprite.Sprite):
         self.accel = 0.5
         self.maxspeed = maxspeed
         self.maxreverse = maxreverse
+        self.resizedim = scaleimg(self.image, 0.1)
     def rotatel(self):
             self.angle += self.rotosp
     def rotater(self):
             self.angle -= self.rotosp
     def rotateim( self, top_left):
-        shipim = pygame.transform.rotate(self.image, self.angle)
-        rect= shipim.get_rect(center = self.image.get_rect(topleft = top_left).center)
+        shipim = pygame.transform.rotate(self.resizedim, self.angle)
+        rect= shipim.get_rect(center = self.resizedim.get_rect(topleft = top_left).center)
         screen.blit(shipim, rect.topleft) 
     def draw(self):
         self.rotateim((self.x, self.y))
