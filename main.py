@@ -87,8 +87,6 @@ class ship(pygame.sprite.Sprite):
         self.image = image
         self.x = pos[0]
         self.y = pos[1]
-        self.height = image.get_height()
-        self.width = image.get_width()
         self.rotosp = rotospd
         self.speed = 0
         self.angle = 0
