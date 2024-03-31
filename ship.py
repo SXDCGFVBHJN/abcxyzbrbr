@@ -46,6 +46,7 @@ class ship(pygame.sprite.Sprite):
         return coll
     def beach(self):
         self.speed = -self.speed
+        self.movearoun()
 class Turret(ship):
     def __init__(self, image, pos):
         self.image = image
