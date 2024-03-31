@@ -45,7 +45,7 @@ class ship(pygame.sprite.Sprite):
         coll = mask.overlap(sh_mask, offset)
         return coll
     def beach(self):
-        self.speed -= self.speed
+        self.speed = -self.speed
 class Turret(ship):
     def __init__(self, image, pos):
         self.image = image
