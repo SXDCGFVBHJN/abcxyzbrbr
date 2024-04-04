@@ -18,8 +18,8 @@ class ship(pygame.sprite.Sprite):
     def rotater(self):
             self.angle -= self.rotosp
     def rotateim( self, top_left):
-        shipim = pygame.transform.rotate(self.resizedim, self.angle)
-        rect= shipim.get_rect(center = self.resizedim.get_rect(topleft = top_left).center)
+        self.rimage = pygame.transform.rotate(self.resizedim, self.angle)
+        rect= self.rimage.get_rect(center = self.rimage.get_rect(topleft = top_left).center)
         screen.blit(shipim, rect.topleft) 
     def draw(self):
         self.rotateim((self.x, self.y))
@@ -40,7 +40,7 @@ class ship(pygame.sprite.Sprite):
         self.speed = min(self.speed + 0.25, 0)
         self.movearoun()
     def colli(self, mask,x = 0, y = 0 ):
-        sh_mask = pygame.mask.from_surface(self.image)
+        self.mask = pygame.mask.from_surface(self.rimage)
         offset = [int(self.x - x),int(self.y - y)]
         coll = mask.overlap(sh_mask, offset)
         return coll
