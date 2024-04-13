@@ -1,16 +1,13 @@
-import pygame
-import math
-import random
-pygame.init()
-logo = pygame.image.load("img/icon.png")
-pygame.display.set_icon(logo)
-pygame.display.set_caption("ship game")
-ssize = [1200, 600]
-screen = pygame.display.set_mode(ssize)
-font = pygame.font.SysFont("Cambria", 100)
+import pygame           #import pygame library
+import math             #import math library
+pygame.init()           # initialize every pygame modules
+pygame.display.set_caption("ship game") # set the caption for the window as "ship game"
+ssize = [1200, 600]                     # using the list for screen size
+screen = pygame.display.set_mode(ssize) # set screen size
+font = pygame.font.SysFont("Cambria", 100) # 
 colorbg = (0,157,196)
 clock = pygame.time.Clock()
-FPS = 60
+FPS = 60 # game fps
 
 
 def scaleimg(img, cons):
@@ -64,40 +61,26 @@ class ship(pygame.sprite.Sprite):
         self.mask = pygame.mask.from_surface(self.rimage)
         offset = [int(self.x - x),int(self.y - y)]
         coll = mask.overlap(self.mask, offset)
-        
+        return coll
     
     def beach(self):
         self.speed = -self.speed
         self.movearoun()
         
-    def input(player, key):
-        movement = False            
-        if key[pygame.K_LEFT]:
-            if player.speed == 0:
-                player.angle += player.rotosp/5
-            else:
-                player.angle += player.rotosp
-        elif key[pygame.K_RIGHT]:
-            if player.speed == 0:
-                player.angle -= player.rotosp/5
-            else:
-                player.angle -= player.rotosp
-        if key[pygame.K_UP]:
-            movement = True
-            player.speed = min(player.speed + player.accel, player.maxspeed)
-            player.movearoun()
-        if key[pygame.K_DOWN]:
-            movement = True
-            player.speed = max(player.speed - player.accel, player.maxreverse)
-            player.movearoun()
-        if not movement:
-            if player.speed > 0:
-                player.speed = max(player.speed - 0.25, 0)
-                player.movearoun()
-            else:
-                player.speed = min(player.speed + 0.25, 0)
-                player.movearoun()
-                
+def input(player, key):
+    movement_map = {
+        pygame.K_LEFT: (-player.rotosp / 5 if player.speed == 0 else -player.rotosp),
+        pygame.K_RIGHT: (player.rotosp / 5 if player.speed == 0 else player.rotosp),
+        pygame.K_UP: (player.accel, True),
+        pygame.K_DOWN: (-player.accel, True)
+    }
+    for key, value in movement_map.items():
+        if key in key:
+            angle_change, movement = value
+            player.angle += angle_change
+            player.speed = min(player.speed + movement[0], player.maxspeed) if movement[1] else max(player.speed - movement[0], player.maxreverse)
+            player.movearound()
+            break      
                 
                                                      
 menutext = font.render("SHIP GAME", True, "#000000")
@@ -112,9 +95,7 @@ p = ship(image = (pygame.image.load("img/ship.png")), pos = [600,300], maxspeed 
 islands = pygame.image.load("img/islands.png").convert_alpha()
 
 islandsmask = pygame.mask.from_surface(islands)
-
 running = True
-
 gamestate = "menu"
 
 while running:
@@ -127,8 +108,8 @@ while running:
         
     if gamestate == "play":
         p.draw()
+        p.input(key = pygame.key.get_pressed())  
         screen.blit(islands, [0,0])            
-        p.input(key = pygame.key.get_pressed())   
         if p.colli(islandsmask):
             p.beach()    
         
@@ -145,4 +126,4 @@ while running:
 
     clock.tick(FPS)
     pygame.display.update()
-pygame.quit()
+pygame.quit() 
