@@ -124,7 +124,6 @@ while running:
                 running = False
         if event.type == pygame.QUIT:
             running = False
-            pygame.quit()
 
     clock.tick(FPS)
     pygame.display.update()
