@@ -1,6 +1,5 @@
 import pygame
 import math
-import random
 pygame.init()
 pygame.display.set_caption("ship game")
 ssize = [1200, 600]
