@@ -1,18 +1,14 @@
-import pygame           #import pygame library
-import math             #import math library
-pygame.init()           # initialize every pygame modules
-pygame.display.set_caption("ship game") # set the caption for the window as "ship game"
-ssize = [1200, 600]                     # using the list for screen size
-screen = pygame.display.set_mode(ssize) # set screen size
-font = pygame.font.SysFont("Cambria", 100) # 
+import pygame
+import math
+import random
+pygame.init()
+pygame.display.set_caption("ship game")
+ssize = [1200, 600]
+screen = pygame.display.set_mode(ssize)
+font = pygame.font.SysFont("Cambria", 100)
 colorbg = (0,157,196)
 clock = pygame.time.Clock()
-FPS = 60 # game fps
-
-
-def scaleimg(img, cons):
-    size = int(img.get_width() * cons), int(img.get_height() * cons)
-    return pygame.transform.scale(img, size)
+FPS = 60
 
 
 class Button():
@@ -32,17 +28,18 @@ class Button():
         return False
 class ship(pygame.sprite.Sprite):
     
-    def __init__(self, image, pos, maxspeed, accel, rotospd, maxreverse):        
+    def __init__(self, image, pos, maxspeed, accel, rotosp, maxreverse):        
         self.image = image
         self.x = pos[0]
         self.y = pos[1]
-        self.rotosp = rotospd
+        self.rotosp = rotosp
         self.speed = 0
         self.angle = 90
         self.accel = accel
         self.maxspeed = maxspeed
         self.maxreverse = maxreverse
-        self.resizedim = scaleimg(self.image, 0.1)
+        size = int(self.image.get_width() * 0.1), int(self.image.get_height() * 0.1)
+        self.resizedim = pygame.transform.scale(self.image, size)
         
     def rotateim(self, top_left):
         self.rimage = pygame.transform.rotate(self.resizedim, self.angle)
@@ -65,23 +62,29 @@ class ship(pygame.sprite.Sprite):
     
     def beach(self):
         self.speed = -self.speed
+        self.rotosp = -self.rotosp
         self.movearoun()
         
-def input(player, key):
-    movement_map = {
-        pygame.K_LEFT: (-player.rotosp / 5 if player.speed == 0 else -player.rotosp),
-        pygame.K_RIGHT: (player.rotosp / 5 if player.speed == 0 else player.rotosp),
-        pygame.K_UP: (player.accel, True),
-        pygame.K_DOWN: (-player.accel, True)
-    }
-    for key, value in movement_map.items():
-        if key in key:
-            angle_change, movement = value
-            player.angle += angle_change
-            player.speed = min(player.speed + movement[0], player.maxspeed) if movement[1] else max(player.speed - movement[0], player.maxreverse)
-            player.movearound()
-            break      
-                
+    def input(player, key):
+        movement = False
+        rotation = {pygame.K_LEFT: 1, pygame.K_RIGHT: -1}
+        for direction_key, direction in rotation.items():
+            if key[direction_key]:
+                player.angle += player.rotosp * direction * (player.speed == 0 and 0.2 or 1)
+                movement = True
+        if key[pygame.K_UP]:
+            movement = True
+            player.speed = min(player.speed + player.accel, player.maxspeed)
+        elif key[pygame.K_DOWN]:
+            movement = True
+            player.speed = max(player.speed - player.accel, player.maxreverse)
+        if not movement:
+            if player.speed > 0:
+                player.speed = max(player.speed - 0.25, 0)
+            else:
+                player.speed = min(player.speed + 0.25, 0)
+        if movement:
+            player.movearoun()
                                                      
 menutext = font.render("SHIP GAME", True, "#000000")
 
@@ -91,7 +94,7 @@ play = Button(image=pygame.image.load("img/play.png"), pos=[600,250])
 
 quit = Button(image=pygame.image.load("img/QUIT.png"), pos=[600,400])
 
-p = ship(image = (pygame.image.load("img/ship.png")), pos = [600,300], maxspeed = 5, accel = 0.5, rotospd = 1.5, maxreverse = -3)
+p = ship(image = (pygame.image.load("img/ship.png")), pos = [600,300], maxspeed = 5, accel = 0.5, rotosp = 1.5, maxreverse = -3)
 islands = pygame.image.load("img/islands.png").convert_alpha()
 
 islandsmask = pygame.mask.from_surface(islands)
@@ -126,4 +129,4 @@ while running:
 
     clock.tick(FPS)
     pygame.display.update()
-pygame.quit() 
+pygame.quit()
