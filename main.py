@@ -69,7 +69,7 @@ class ship(pygame.sprite.Sprite):
     def movearoun(self):
         #transform the angle into radians using math library
         rad = math.radians(self.angle)
-        #getting the x and y coordinates by subtracting the value of the sin for x and cos for y times current speed 
+        #get the x and y coordinates by subtracting the value of the sin for x and cos for y times current speed 
         self.pos[0] -= math.sin(rad)* self.speed
         self.pos[1] -= math.cos(rad)* self.speed
     #define collision function    
