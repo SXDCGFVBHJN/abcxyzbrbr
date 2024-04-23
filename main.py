@@ -99,16 +99,16 @@ class ship(pygame.sprite.Sprite):
         #create a dictionary to map arrow keys to rotation directions and set the corresponding key to the value -1 and 1
         rotation = {pygame.K_LEFT: 1, pygame.K_RIGHT: -1}
         #iterate through key value in the rotation dictionary
-        for direction_key, direction in rotation.items():
+        for dir_key, rot in rotation.items():
             #check if the corresponding arrow key is pressed
-            if key[direction_key]:
+            if key[dir_key]:
                     #check if speed = 0
                     if player.speed == 0:
                     #slower rotation
-                        player.angle += player.rotosp * direction/5
+                        player.angle += player.rotosp * rot/5
                     else:
                     # Standard rotation
-                        player.angle += player.rotosp * direction
+                        player.angle += player.rotosp * rot
         #check if key is the up arrow key
         if key[pygame.K_UP]:
             #change movement to True
