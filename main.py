@@ -19,34 +19,30 @@ clock = pygame.time.Clock()
 #game FPS
 FPS = 60
 
-# Create button class 
+#create button class 
 class Button():
     #define the init function and get self, image and position
     def __init__(self, image, pos):
         #set self image as the image parameter 
         self.image = image
-        #set x coordinate as the first index in the position list
-        self.x = pos[0]
-        #set y coordinate as the second index in the position list
-        self.y = pos[1]
+        #set self position to pos
+        self.pos = pos
         #create a rectangle for the image representing the position
-        self.rect = self.image.get_rect(center=(self.x, self.y))
+        self.rect = self.image.get_rect(center=(self.pos))
     #define the interact function and gets self and the mouse position   
     def interact(self,mouspos):
         #check the position x and y of the mouse if it's in the button rectangle 
         if mouspos[0] in range(self.rect.left, self.rect.right) and mouspos[1] in range(self.rect.top, self.rect.bottom):
             #return True if the requirements are met
             return True
-#Creat ship class
+#create ship class
 class ship(pygame.sprite.Sprite):
     #define the init fuction and takes in self, image and position 
     def __init__(self, image, pos):
         #set the self image as the image parameter        
         self.image = image
-        #set self x as the first index of the position list
-        self.x = pos[0]
-        #set self y as the second index of the position list
-        self.y = pos[1]
+        #set position to pos
+        self.pos = pos
         #set rotation speed
         self.rotosp = 1.5
         #set current speed
@@ -68,20 +64,20 @@ class ship(pygame.sprite.Sprite):
         #set the rotated image as the resized image and the angle
         self.rimage = pygame.transform.rotate(self.resizedim, self.angle)
         #show the rotated image to the screen
-        screen.blit(self.rimage, [self.x, self.y]) 
+        screen.blit(self.rimage, self.pos) 
     #define the move around function   
     def movearoun(self):
         #transform the angle into radians using math library
         rad = math.radians(self.angle)
         #getting the x and y coordinates by subtracting the value of the sin for x and cos for y times current speed 
-        self.x -= math.sin(rad)* self.speed
-        self.y -= math.cos(rad)* self.speed
+        self.pos[0] -= math.sin(rad)* self.speed
+        self.pos[1] -= math.cos(rad)* self.speed
     #define collision function    
     def colli(self, mask):
         #set the mask as the rotated image
         self.mask = pygame.mask.from_surface(self.rimage)
         #set the offset as the integer of the coordinates
-        offset = [int(self.x),int(self.y)]
+        offset = (int(self.pos[0]),int(self.pos[1]))
         #set collision to check for the point of intersection
         coll = mask.overlap(self.mask, offset)
         #return the collision variable
