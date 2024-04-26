@@ -12,7 +12,7 @@ ssize = [1200, 600]
 screen = pygame.display.set_mode(ssize)
 #get font from system 
 font = pygame.font.SysFont("Cambria", 100)
-# color for background (RGB, light blue)
+#color for background in RGB code(light blue)
 colorbg = (0,157,196)
 #create clock
 clock = pygame.time.Clock()
